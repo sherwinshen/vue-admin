@@ -8,6 +8,17 @@ module.exports = {
     // eslint-loader 是否在保存的时候检查
     lintOnSave: true,
     // webpack配置,see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
+    chainWebpack: (config) => {
+        const svgRule = config.module.rule("svg");
+        svgRule.uses.clear();
+        svgRule
+            .use("svg-sprite-loader")
+            .loader("svg-sprite-loader")
+            .options({
+                symbolId: "icon-[name]",
+                include: ["./src/components/icons"]
+            });
+    },
     configureWebpack: (config) => {
         config.resolve = { // 配置解析别名
             extensions: ['.js', '.json', '.vue'],
@@ -18,7 +29,8 @@ module.exports = {
                 'common': path.resolve(__dirname, './src/common'),
                 'api': path.resolve(__dirname, './src/api'),
                 'views': path.resolve(__dirname, './src/views'),
-                'data': path.resolve(__dirname, './src/data')
+                'data': path.resolve(__dirname, './src/data'),
+                'vue': 'vue/dist/vue.esm.js',
             }
         }
     },

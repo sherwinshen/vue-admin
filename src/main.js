@@ -6,6 +6,7 @@ import store from './store'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueCompositionApi from '@vue/composition-api';
+import 'components/svgIcon' // 引入自定义全局组件 - svg-icons
 
 Vue.use(ElementUI);
 Vue.use(VueCompositionApi);
