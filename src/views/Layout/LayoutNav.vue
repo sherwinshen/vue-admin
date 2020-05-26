@@ -1,6 +1,9 @@
 <template>
     <div id="layout-nav">
-        <el-menu default-active="/homeIndex" router>
+        <div class="logo">
+            <img src="../../assets/images/logo.png" alt="">
+        </div>
+        <el-menu background-color="transparent"  router :collapse="isCollapse">
             <template v-for="item in routers">
                 <el-submenu v-if='!item.hidden' :key="item.path" :index="item.path">
                     <template slot="title">
@@ -15,18 +18,33 @@
 </template>
 
 <script>
-    import {reactive} from '@vue/composition-api'
+    import {reactive, computed} from '@vue/composition-api'
 
     export default {
         name: "layout_nav",
         setup(props, {root}) {
             const routers = reactive(root.$router.options.routes)
-            return {routers}
+            const isCollapse = computed(() => root.$store.state.app.isCollapse)
+            return {routers, isCollapse}
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    #layout-nav {
+        background-color: $color-main;
+    }
+
+    .logo {
+        text-align: center;
+
+        img {
+            margin: 28px auto 25px;
+            width: 92px;
+            @include webkit(transition, all .3s ease 0s);
+        }
+    }
+
     .svg-icon {
         padding-right: 10px;
         padding-bottom: 5px;

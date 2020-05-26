@@ -1,21 +1,19 @@
 // 专门用于修改elementUI的相关样式
 .el-menu {
 
-  i,.el-submenu__title, .el-menu-item {
+  i, .el-submenu__title, .el-menu-item {
     color: white;
   }
 
   .el-submenu__title {
-    //font-size: 16px;
 
     &:hover {
-      background-color: $color-second;
+      background-color: $color-second !important;
     }
   }
 
-
   .el-submenu {
-    background-color: $color-main;
+    background-color: $color-main !important;
 
     .el-menu-item {
       &.is-active {
@@ -27,11 +25,36 @@
   }
 
   .el-menu--inline {
-    background-color: #2f4357;
+    background-color: #2f4357 !important;
 
     .el-menu-item:hover {
-      background-color: rgba(245, 100, 108, .2);
+      background-color: rgba(245, 100, 108, .2) !important;
     }
   }
 
+}
+
+.el-menu--vertical {
+  .el-menu {
+    min-width: 120px;
+    background-color: #2f4357!important;
+  }
+  .el-menu--popup{
+    padding: 0;
+  }
+  .el-menu--popup-right-start{
+    margin-left: 0;
+  }
+
+  .el-menu-item {
+    text-align: center;
+    padding-left: 0!important;
+    &.is-active {
+      background-color: rgba(245, 100, 108, .2) !important;
+    }
+
+    &:hover {
+      background-color: rgba(245, 100, 108, .2) !important;
+    }
+  }
 }

@@ -45,7 +45,7 @@
 <script>
     import {reactive, ref} from "@vue/composition-api"
     import {emailRule, passwordRule, codeRule} from "@/utils/validate"
-    import {GetSms, Login, Register} from 'api/login.js'
+    import {GetSms, Register} from 'api/login.js'
     import sha1 from 'js-sha1'
 
     export default {
@@ -104,8 +104,8 @@
             ]);
             // 表单内容
             const loginForm = reactive({
-                email: '',
-                password: '',
+                email: '306@qq.com',
+                password: '1234sw',
                 passwordRepeat: ''
             });
             // 表单验证规则
@@ -181,9 +181,9 @@
                     password: sha1(loginForm.password),
                     code: loginForm.code
                 }
-                Login(requestData).then(response => {
-                    console.log(response)
+                root.$store.dispatch('login/login', requestData).then(() => {
                     // 页面跳转
+                    root.$router.push({name: 'Console'})
                 }).catch(() => {
                     console.log('登录失败')
                 })

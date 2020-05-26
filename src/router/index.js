@@ -20,6 +20,7 @@ const routes = [
     {
         path: '/console',
         name: 'Console',
+        redirect: '/homeIndex',
         component: layout,
         meta: {
             name: '控制台',

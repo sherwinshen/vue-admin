@@ -1,6 +1,6 @@
 <template>
     <div id="layout-header" class="clear">
-        <div class="pull-left header-icon">
+        <div class="pull-left header-icon" @click="navMenuCollapse">
             <svg-icon class-name="zhankai" icon-class="zhankai"></svg-icon>
         </div>
         <div class="pull-right">
@@ -20,9 +20,12 @@
 
     export default {
         name: "layout_header",
-        setup() {
+        setup(props, {root}) {
             const userName = ref('Sherwin')
-            return {userName}
+            const navMenuCollapse = (() => {
+                root.$store.commit('app/SET_COLLAPSE')
+            })
+            return {userName, navMenuCollapse}
         }
     }
 </script>
@@ -33,9 +36,11 @@
             line-height: 65px;
             padding: 0 32px;
             border-right: 1px solid #ededed;
+
             + .header-icon {
                 padding: 0 28px;
             }
+
             img {
                 display: inline-block;
                 width: 39px;
@@ -53,7 +58,5 @@
             cursor: pointer;
             padding: 0 32px;
         }
-
     }
-
 </style>
