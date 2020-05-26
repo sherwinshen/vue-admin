@@ -50,7 +50,7 @@
         height: 100vh;
         width: 200px;
         background: $color-main;
-        @include webkit(transition, all .3s ease 0s);
+        @include webkit(transition, all .5s ease 0s);
     }
 
     .el-header {

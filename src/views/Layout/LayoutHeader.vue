@@ -8,7 +8,7 @@
                 <img src="../../assets/images/face.png" alt="">
                 {{userName}}
             </div>
-            <div class="pull-left header-icon">
+            <div class="pull-left header-icon" @click="emit">
                 <svg-icon class-name="guanbi" icon-class="guanbi"></svg-icon>
             </div>
         </div>
@@ -16,16 +16,33 @@
 </template>
 
 <script>
-    import {ref} from '@vue/composition-api'
+    import {computed} from '@vue/composition-api'
 
     export default {
         name: "layout_header",
         setup(props, {root}) {
-            const userName = ref('Sherwin')
+            const userName = computed(() => root.$store.state.login.userName)
             const navMenuCollapse = (() => {
                 root.$store.commit('app/SET_COLLAPSE')
             })
-            return {userName, navMenuCollapse}
+            const emit = (() => {
+                root.$confirm('退出登录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    root.$store.dispatch('login/exit').then(() => {
+                        console.log('hello')
+                        root.$router.push({name: 'Login'})
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            })
+            return {userName, navMenuCollapse, emit}
         }
     }
 </script>

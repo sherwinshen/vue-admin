@@ -41,7 +41,7 @@
         img {
             margin: 28px auto 25px;
             width: 92px;
-            @include webkit(transition, all .3s ease 0s);
+            @include webkit(transition, all .5s ease 0s);
         }
     }
 

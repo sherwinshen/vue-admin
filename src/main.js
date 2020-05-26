@@ -7,6 +7,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueCompositionApi from '@vue/composition-api';
 import 'components/svgIcon' // 引入自定义全局组件 - svg-icons
+import './router/guard' // 引入路由守卫
 
 Vue.use(ElementUI);
 Vue.use(VueCompositionApi);
@@ -14,7 +15,7 @@ Vue.use(VueCompositionApi);
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')
