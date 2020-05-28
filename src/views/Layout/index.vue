@@ -17,9 +17,9 @@
 </template>
 
 <script>
-    import LayoutNav from './LayoutNav'
-    import LayoutMain from './LayoutMain'
-    import LayoutHeader from "./LayoutHeader";
+    import LayoutNav from './components/layoutNav'
+    import LayoutMain from './components/layoutMain'
+    import LayoutHeader from "./components/layoutHeader";
     import {computed} from "@vue/composition-api";
 
     export default {
@@ -33,10 +33,16 @@
 </script>
 
 <style lang="scss">
-    .closed {
-        width: 65px !important;
-        .logo {
-            img {
+    .el-aside {
+        height: 100vh;
+        width: 200px !important;
+        background: $color-main;
+        @include webkit(transition, all .5s ease 0s);
+
+        &.closed {
+            width: 65px !important;
+
+            .logo img {
                 width: 50px !important;
             }
         }
@@ -44,13 +50,6 @@
 
     .el-header, .el-main {
         padding: 0 !important;
-    }
-
-    .el-aside {
-        height: 100vh;
-        width: 200px;
-        background: $color-main;
-        @include webkit(transition, all .5s ease 0s);
     }
 
     .el-header {
@@ -67,5 +66,4 @@
     .el-container {
         background-color: #f7f7f7;
     }
-
 </style>

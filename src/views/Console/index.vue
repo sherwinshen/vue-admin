@@ -1,6 +1,6 @@
 <template>
-    <div>
-        this is console
+    <div id="console">
+        欢迎使用后台管理系统
     </div>
 </template>
 
@@ -10,6 +10,13 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    #console {
+        color: $color-main;
+        font-size: 35px;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        @include webkit(transform, translateX(-50%));
+    }
 </style>

@@ -1,12 +1,13 @@
 // ------------ 请求拦截器 ------------
+
 import axios from 'axios'
 import {Message} from 'element-ui' // 前面element-ui是在vue中全局引入，我们js文件这边需要重新引入才能使用
 
 // 创建axios，赋给变量service - 基本配置
-// const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/api';
+const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/api';
 const service = axios.create({
-    // baseURL: BASEURL,
-    baseURL: '/api',
+    baseURL: BASEURL,
+    // baseURL: '/api',
     timeout: 8000, // 超时
 });
 

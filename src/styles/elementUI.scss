@@ -1,26 +1,29 @@
-// 专门用于修改elementUI的相关样式
+/**
+ * 导航菜单 - layout-nav
+ */
+// 展开样式
 .el-menu {
-
-  i, .el-submenu__title, .el-menu-item {
-    color: white;
-  }
+  border-right: none;
 
   .el-submenu__title {
+    color: white;
+
+    i {
+      color: white
+    }
 
     &:hover {
       background-color: $color-second !important;
     }
   }
 
-  .el-submenu {
-    background-color: $color-main !important;
+  .el-menu-item {
+    color: white;
 
-    .el-menu-item {
-      &.is-active {
-        background-color: rgba(245, 100, 108, .2) !important;
-        //font-size: 16px;
-        @include webkit(transition, all .2s ease 0s);
-      }
+    &.is-active {
+      background-color: rgba(245, 100, 108, .2) !important;
+      //font-size: 16px;
+      @include webkit(transition, all .2s ease 0s);
     }
   }
 
@@ -31,24 +34,27 @@
       background-color: rgba(245, 100, 108, .2) !important;
     }
   }
-
 }
 
+// 折叠样式
 .el-menu--vertical {
   .el-menu {
     min-width: 120px;
-    background-color: #2f4357!important;
+    background-color: #2f4357 !important;
   }
-  .el-menu--popup{
+
+  .el-menu--popup {
     padding: 0;
   }
-  .el-menu--popup-right-start{
+
+  .el-menu--popup-right-start {
     margin-left: 0;
   }
 
   .el-menu-item {
     text-align: center;
-    padding-left: 0!important;
+    padding: 0 !important;
+
     &.is-active {
       background-color: rgba(245, 100, 108, .2) !important;
     }
@@ -58,3 +64,37 @@
     }
   }
 }
+
+/**
+ * 表单样式 - infoIndex
+ */
+.el-form-item__label {
+  font-size: 14px;
+}
+
+.el-date-editor--daterange.el-input__inner {
+  width: 100%;
+}
+
+.el-form-item {
+  margin-bottom: 22px;
+}
+
+/**
+ * 表格样式 - infoIndex
+ */
+div.el-table {
+  td, th {
+    text-align: center;
+  }
+
+  th {
+    font-weight: bold;
+    color: #344a5f;
+  }
+
+  td {
+    font-size: 14px;
+  }
+}
+

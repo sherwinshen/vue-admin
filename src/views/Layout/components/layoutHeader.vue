@@ -1,11 +1,11 @@
 <template>
-    <div id="layout-header" class="clear">
+    <div id="layout-header">
         <div class="pull-left header-icon" @click="navMenuCollapse">
             <svg-icon class-name="zhankai" icon-class="zhankai"></svg-icon>
         </div>
         <div class="pull-right">
             <div class="pull-left user-info">
-                <img src="../../assets/images/face.png" alt="">
+                <img src="../../../assets/images/face.png" alt="">
                 {{userName}}
             </div>
             <div class="pull-left header-icon" @click="emit">
@@ -19,12 +19,17 @@
     import {computed} from '@vue/composition-api'
 
     export default {
-        name: "layout_header",
+        name: "layoutHeader",
         setup(props, {root}) {
+            // ----------------------------------- 声明数据 -----------------------------------
             const userName = computed(() => root.$store.state.login.userName)
+
+            // ----------------------------------- 声明函数 -----------------------------------
+            // 菜单栏展开/折叠
             const navMenuCollapse = (() => {
                 root.$store.commit('app/SET_COLLAPSE')
             })
+            // 退出登录
             const emit = (() => {
                 root.$confirm('退出登录, 是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -36,13 +41,16 @@
                         root.$router.push({name: 'Login'})
                     })
                 }).catch(() => {
-                    this.$message({
+                    root.$message({
                         type: 'info',
                         message: '已取消删除'
                     });
                 });
             })
-            return {userName, navMenuCollapse, emit}
+            // ----------------------------------- return -----------------------------------
+            return {
+                userName, navMenuCollapse, emit
+            }
         }
     }
 </script>
@@ -54,10 +62,6 @@
             padding: 0 32px;
             border-right: 1px solid #ededed;
 
-            + .header-icon {
-                padding: 0 28px;
-            }
-
             img {
                 display: inline-block;
                 width: 39px;
@@ -67,13 +71,14 @@
                 border-radius: 100px;
                 object-fit: cover;
             }
-        }
 
+        }
         .header-icon {
             line-height: 65px;
             font-size: 20px;
             cursor: pointer;
             padding: 0 32px;
         }
+
     }
 </style>

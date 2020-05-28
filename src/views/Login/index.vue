@@ -40,18 +40,19 @@
             </el-form>
         </div>
     </div>
+
 </template>
 
 <script>
-    import {reactive, ref} from "@vue/composition-api"
+    import {reactive, ref} from "@vue/composition-api";
+    import sha1 from "js-sha1";
     import {emailRule, passwordRule, codeRule} from "@/utils/validate"
-    import {GetSms, Register} from 'api/login.js'
-    import sha1 from 'js-sha1'
+    import {Register, GetSms} from "@/api/login";
 
     export default {
-        name: "login_and_register",
+        name: "login",
         // setup(props, context) {
-        setup(props, {refs, root}) { // 解构的写法
+        setup(props, {refs, root}) {  // 解构的写法
             // 验证邮箱、密码、重复密码、验证码
             let validateEmail = (rule, value, callback) => {
                 if (!value) {
@@ -108,6 +109,15 @@
                 password: '1234sw',
                 passwordRepeat: ''
             });
+            // 登录按钮属性
+            const loginButton = reactive({
+                disabled: true
+            });
+            // 验证码按钮属性
+            const codeButton = reactive({
+                text: '获取验证码',
+                disabled: false
+            });
             // 表单验证规则
             const rules = reactive({
                 email: [{
@@ -123,24 +133,10 @@
                     validator: validateCode, trigger: 'blur'
                 }]
             });
-            // 登录按钮属性
-            const loginButton = reactive({
-                disabled: true
-            });
-            // 验证码按钮属性
-            const codeButton = reactive({
-                text: '获取验证码',
-                disabled: false
-            });
             // 倒计时
             const timer = ref(null);
 
             // ----------------------------------- 声明函数 -----------------------------------
-            // 验证码按钮属性更新
-            const updateCodeBtn = ((params) => {
-                codeButton.text = params.text
-                codeButton.disabled = params.disabled
-            });
             // 切换模块
             const toggleMenu = ((item) => {
                 menuTab.forEach(i => {
@@ -154,7 +150,7 @@
             // 清除表单数据
             const resetFromData = (() => {
                 refs.loginForm.resetFields();
-            })
+            });
             // 清除倒计时
             const clearCountDown = (() => {
                 updateCodeBtn({
@@ -162,7 +158,12 @@
                     text: '获取验证码'
                 })
                 clearInterval(timer.value)
-            })
+            });
+            // 验证码按钮属性更新
+            const updateCodeBtn = ((params) => {
+                codeButton.text = params.text
+                codeButton.disabled = params.disabled
+            });
             // 提交表单
             const submitForm = ((formName) => {
                 refs[formName].validate((valid) => {
@@ -262,8 +263,12 @@
 
             // ----------------------------------- return -----------------------------------
             return {
-                menuTab, loginForm, rules, model, loginButton, codeButton,
-                toggleMenu, submitForm, getSms
+                // ref
+                model,
+                // reactive
+                menuTab, loginButton, codeButton, loginForm, rules,
+                // methods
+                toggleMenu, getSms, submitForm
             }
         }
     }

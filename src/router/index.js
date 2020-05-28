@@ -61,6 +61,7 @@ const routes = [
             },
             {
                 path: '/infoDetailed',
+                hidden: true,
                 component: () => import('../views/Info/detailed'),
                 meta: {
                     name: '信息详情'

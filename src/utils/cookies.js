@@ -1,3 +1,5 @@
+// ------------ cookies处理 ------------
+
 import cookie from "cookie_js";
 
 const adminToKen = "admin_toKen";

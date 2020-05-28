@@ -59,7 +59,7 @@ module.exports = {
         hotOnly: false,
         proxy: { // 设置代理
             '/api': {
-                target: 'http://www.web-jshtml.cn/productapi', // 服务地址
+                target: 'http://www.web-jshtml.cn/productapi/token', // 服务地址
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

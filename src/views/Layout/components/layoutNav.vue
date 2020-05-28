@@ -1,16 +1,18 @@
 <template>
     <div id="layout-nav">
         <div class="logo">
-            <img src="../../assets/images/logo.png" alt="">
+            <img src="../../../assets/images/logo.png" alt="">
         </div>
-        <el-menu background-color="transparent"  router :collapse="isCollapse">
+        <el-menu background-color="transparent" :collapse="isCollapse" router>
             <template v-for="item in routers">
                 <el-submenu v-if='!item.hidden' :key="item.path" :index="item.path">
                     <template slot="title">
                         <svg-icon :class-name="item.meta.icon" :icon-class="item.meta.icon"></svg-icon>
                         <span slot="title">{{item.meta.name}}</span>
                     </template>
-                    <el-menu-item v-for="subItem in item.children" :key="subItem.path" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
+                    <template v-for="subItem in item.children">
+                        <el-menu-item v-if="!subItem.hidden" :key="subItem.path" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
+                    </template>
                 </el-submenu>
             </template>
         </el-menu>
@@ -32,23 +34,21 @@
 
 <style lang="scss" scoped>
     #layout-nav {
-        background-color: $color-main;
-    }
+        .logo {
+            text-align: center;
 
-    .logo {
-        text-align: center;
-
-        img {
-            margin: 28px auto 25px;
-            width: 92px;
-            @include webkit(transition, all .5s ease 0s);
+            img {
+                margin: 28px auto 25px;
+                width: 92px;
+                @include webkit(transition, all .5s ease 0s);
+            }
         }
-    }
 
-    .svg-icon {
-        padding-right: 10px;
-        padding-bottom: 5px;
-        font-size: 20px;
-        font-weight: bold;
+        .svg-icon {
+            padding-right: 10px;
+            padding-bottom: 5px;
+            font-size: 20px;
+            font-weight: bold;
+        }
     }
 </style>
