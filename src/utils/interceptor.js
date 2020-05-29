@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import {Message} from 'element-ui' // 前面element-ui是在vue中全局引入，我们js文件这边需要重新引入才能使用
+import {getToKen, getUserName} from './cookies'
 
 // 创建axios，赋给变量service - 基本配置
 const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/api';
@@ -13,7 +14,9 @@ const service = axios.create({
 
 // 添加请求拦截器
 service.interceptors.request.use(function (config) {
-    // 在发送请求之前做些什么
+    // 在发送请求之前添加token等头信息
+    config.headers['Tokey'] = getToKen()
+    config.headers['UserName'] = getUserName()
     return config;
 }, function (error) {
     // 对请求错误做些什么

@@ -6,9 +6,9 @@
                 <el-form :model="searchForm" ref="ruleForm">
                     <el-col :span="4">
                         <el-form-item label="类型:" label-width="45px">
-                            <el-select v-model="searchForm.category" placeholder="请选择">
+                            <el-select v-model="searchForm.category" placeholder="请选择" clearable>
                                 <el-option
-                                        v-for="item in category_options"
+                                        v-for="item in category_options.data"
                                         :key="item.id"
                                         :value="item.id"
                                         :label="item.category_name">
@@ -21,6 +21,7 @@
                             <el-date-picker
                                     v-model="searchForm.data_value"
                                     type="daterange"
+                                    value-format="yyyy-MM-dd"
                                     range-separator="至"
                                     start-placeholder="开始日期"
                                     end-placeholder="结束日期">
@@ -29,7 +30,7 @@
                     </el-col>
                     <el-col :span="4">
                         <el-form-item label="关键字:" label-width="70px">
-                            <el-select v-model="searchForm.keyword" placeholder="请选择">
+                            <el-select v-model="searchForm.keyword" placeholder="请选择" clearable>
                                 <el-option
                                         v-for="item in keywords_options"
                                         :key="item.value"
@@ -56,24 +57,24 @@
         <div class="info-table">
             <el-table
                     border
-                    :data="table_data"
+                    :data="table.data"
                     style="width: 100%"
                     v-loading="loadingData"
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="40"></el-table-column>
+                <el-table-column prop="id" width="80" label="ID"></el-table-column>
                 <el-table-column prop="title" label="标题"></el-table-column>
-                <el-table-column prop="categoryId" label="类型" width="100"></el-table-column>
-                <el-table-column prop="createDate" label="日期" width="180"></el-table-column>
+                <el-table-column prop="categoryId" label="类型" width="100" :formatter="toCategory"></el-table-column>
+                <el-table-column prop="createDate" label="日期" width="180" :formatter="toDate"></el-table-column>
                 <el-table-column prop="user" label="管理员" width="100"></el-table-column>
-                <el-table-column label="操作" width="200">
+                <el-table-column label="操作" width="250">
                     <template slot-scope="scope">
-                        <el-button type="danger" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                        <el-button type="success" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button type="success" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
+                        <el-button type="primary" size="mini" @click="handleEdit(scope.row.id)">详情</el-button>
                     </template>
                 </el-table-column>
-
-
             </el-table>
         </div>
         <!--底部分页-->
@@ -95,93 +96,216 @@
             </el-col>
         </el-row>
         <!--新增表单-弹出窗口-->
-        <DialogInfoAdd :flag.sync="dialog_add"></DialogInfoAdd>
+        <DialogInfoAdd :flag.sync="dialog_add" :category="category_options.data"></DialogInfoAdd>
         <!--编辑表单-弹出窗口-->
-        <DialogInfoEdit :flag.sync="dialog_edit"></DialogInfoEdit>
+        <DialogInfoEdit :flag.sync="dialog_edit" :category="category_options.data" :id="infoId" @getEditedList="updateItem"></DialogInfoEdit>
     </div>
 </template>
 
 <script>
-    import {reactive, ref} from '@vue/composition-api'
+    import {onMounted, reactive, ref} from '@vue/composition-api'
     import DialogInfoAdd from "../../components/dialog/infoAdd";
     import DialogInfoEdit from "../../components/dialog/infoEdit";
     import global from "../../utils/global";
+    import {DeleteInfo, GetList} from "../../api/info";
+    import {TimestampToDate} from '../../utils/formatData'
 
     export default {
         name: "info",
         components: {DialogInfoEdit, DialogInfoAdd},
-        setup() {
+        setup(props, {root}) {
             // ----------------------------------- 声明数据 -----------------------------------
+            // 搜索表单
             const searchForm = reactive({
                 category: '',
                 data_value: '',
+                keyword: '',
                 search_keyWord: ''
             })
-            const category_options = reactive([
-                {
-                    id: 1, category_name: 'hello'
-                }
-            ])
-            const keywords_options = reactive([
-                {
-                    value: 'name', label: '姓名'
-                }
-            ])
-            const table_data = reactive([
-                {
-                    title: '111111',
-                    categoryId: '2222',
-                    createDate: '33333',
-                    user: '4444'
-                }
-            ])
-            const loadingData = ref(false)
+            // 类型目录
+            let category_options = reactive({data: []})
+            // 关键字目录
+            const keywords_options = reactive([{value: 'id', label: 'ID',}, {value: 'title', label: '标题',}])
+            // 表格内容
+            const table = reactive({
+                data: []
+            })
+            // 表格选择
+            const multipleSelection = reactive({
+                data: []
+            })
+            // 页码
+            const page = reactive({
+                pageNumber: 1,
+                pageSize: 10
+            })
+            // 表格条数
             const total = ref(0)
+            // 编辑的数据
+            const infoId = ref('')
+            // 其他
+            const loadingData = ref(false)
             const dialog_add = ref(false)
             const dialog_edit = ref(false)
 
             // ----------------------------------- 声明函数 -----------------------------------
             const {confirm} = global();
+
+            // 更新编辑的表单内容
+            const updateItem = (() => {
+                let requestData = {
+                    id: infoId.value,
+                    pageNumber: 1,
+                    pageSize: 1
+                }
+                GetList(requestData).then(response => {
+                    let data = response.data.data.data[0]
+                    let item = table.data[table.data.findIndex(item => item.id === infoId.value)]
+                    item.title = data.title
+                    item.content = data.content
+                    item.categoryId = data.categoryId
+                })
+            })
+            // 表单搜索
             const search = (() => {
+                getList();
             })
-            const handleSelectionChange = (() => {
-            })
-            const handleDelete = (() => {
+            // 删除确认
+            const handleDelete = ((id) => {
                 confirm({
                     content: "确认删除当前信息，确认后将无法恢复！！",
                     tip: "警告"
                 })
-            })
-            const handleEdit = (() => {
-                dialog_edit.value = true
-            })
-            const deleteAll = (() => {
+                multipleSelection.data = [id]
                 confirm({
                     content: "确认删除选择的数据，确认后将无法恢复！",
-                    tip: "警告"
+                    tip: "警告",
+                    fn: deleteItems
                 })
             })
-            const handleSizeChange = (() => {
+            // 批量删除确认
+            const deleteAll = (() => {
+                if (!multipleSelection.data || multipleSelection.data.length === 0) {
+                    root.$message({
+                        message: "请选择要删除的数据！！",
+                        type: "error"
+                    })
+                    return false;
+                }
+                confirm({
+                    content: "确认删除选择的数据，确认后将无法恢复！",
+                    tip: "警告",
+                    fn: deleteItems
+                })
             })
-            const handleCurrentChange = (() => {
+            // 表格内容删除处理
+            const deleteItems = (() => {
+                DeleteInfo({id: multipleSelection.data}).then(() => {
+                    multipleSelection.data = [];
+                    getList();
+                })
             })
+            // 表格选择处理
+            const handleSelectionChange = ((val) => {
+                multipleSelection.data = val.map(item => item.id)
+            })
+            // 格式化时间
+            const toDate = ((row) => {
+                return TimestampToDate(row.createDate)
+            })
+            // 格式化类型
+            const toCategory = ((row) => {
+                const categoryDate = category_options.data.filter(item => item.id === row.categoryId)[0]
+                console.log(categoryDate)
+                if(categoryDate){
+                    return categoryDate.category_name
+                }else {
+                    return 'null'
+                }
+            })
+            // 切换每页显示条数
+            const handleSizeChange = ((val) => {
+                page.pageSize = val
+                getList()
+            })
+            // 切换页码
+            const handleCurrentChange = ((val) => {
+                page.pageNumber = val
+                getList();
+            })
+            // 获取分类
+            const getInfoCategory = (() => {
+                root.$store.dispatch('info/getInfoCategory').then(response => {
+                    category_options.data = response
+                })
+            })
+            // 获取表格数据的搜索条件
+            const searchData = (() => {
+                let requestData = {
+                    pageNumber: page.pageNumber,
+                    pageSize: page.pageSize
+                }
+                if (searchForm.category) {
+                    requestData.categoryId = searchForm.category
+                }
+                if (searchForm.data_value.length > 0) {
+                    requestData.startTime = searchForm.data_value[0]
+                    requestData.endTime = searchForm.data_value[1]
+                }
+                if (searchForm.keyword) {
+                    requestData[searchForm.keyword] = searchForm.search_keyWord
+                }
+                return requestData
+            })
+            // 获取表格数据
+            const getList = (() => {
+                const requestData = searchData()
+                loadingData.value = true
+                GetList(requestData).then(response => {
+                    let data = response.data.data
+                    table.data = data.data
+                    total.value = data.total
+                    loadingData.value = false
+                }).catch(() => {
+                    loadingData.value = false
+                })
+            })
+            // 表格数据编辑
+            const handleEdit = ((id) => {
+                infoId.value = id
+                dialog_edit.value = true
+            })
+
+            /*
+             * mouted
+             * */
+            onMounted(() => {
+                getInfoCategory();
+                getList();
+            })
+
 
             // ----------------------------------- return -----------------------------------
             return {
                 // ref
-                loadingData, total, dialog_add, dialog_edit,
+                loadingData, total, dialog_add, dialog_edit, infoId,
                 // reactive
-                searchForm, category_options, keywords_options, table_data,
+                searchForm, category_options, keywords_options, table, page, multipleSelection,
                 // methods
-                search, handleSelectionChange, handleDelete, handleEdit, deleteAll, handleSizeChange, handleCurrentChange
+                search, handleSelectionChange, handleDelete, handleEdit, deleteAll, handleSizeChange,
+                handleCurrentChange, toDate, toCategory, getList, updateItem,
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    #info-index {
+        margin-bottom: 30px;
+    }
+
     .info-table {
-        margin: 30px 0;
+        margin: 10px 0 20px 0;
     }
 
     .newBtn {

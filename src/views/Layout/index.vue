@@ -8,7 +8,7 @@
                 <el-header>
                     <layout-header></layout-header>
                 </el-header>
-                <el-main>
+                <el-main style="height: calc(100vh - 80px)">
                     <layout-main></layout-main>
                 </el-main>
             </el-container>
@@ -66,4 +66,5 @@
     .el-container {
         background-color: #f7f7f7;
     }
+
 </style>

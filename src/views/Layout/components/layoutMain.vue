@@ -12,6 +12,7 @@
 
 <style lang="scss" scoped>
     #layout-main {
+        @include webkit( box-sizing, border-box);
         position: relative;
         padding: 30px;
         height: 100%;

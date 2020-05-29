@@ -9,15 +9,17 @@ export default function global() {
             type: params.type || "warning",
             center: true
         }).then(() => {
-            this.$message({
+            MessageBox({
                 type: 'success',
                 message: '删除成功!'
-            });
+            }).then();
+            params.fn && params.fn()
         }).catch(() => {
-            this.$message({
+            MessageBox({
                 type: 'info',
                 message: '已取消删除'
-            });
+            }).then();
+            params.catchFn && params.catchFn()
         });
     }
     return {confirm}

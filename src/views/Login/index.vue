@@ -46,8 +46,8 @@
 <script>
     import {reactive, ref} from "@vue/composition-api";
     import sha1 from "js-sha1";
-    import {emailRule, passwordRule, codeRule} from "@/utils/validate"
-    import {Register, GetSms} from "@/api/login";
+    import {emailRule, passwordRule, codeRule} from "../../utils/validate"
+    import {Register, GetSms} from "../../api/login";
 
     export default {
         name: "login",
