@@ -88,6 +88,9 @@
                     })
                     submitLoading.value = false
                     resetForm()
+                    dialog_add.value = false
+                    emit('update:flag', false)
+                    emit('getList')
                 }).catch(() => {
                     submitLoading.value = false
                     resetForm()
@@ -99,11 +102,4 @@
 </script>
 
 <style lang="scss" scoped>
-    .btn-group {
-        text-align: center;
-
-        .el-button {
-            width: 180px;
-        }
-    }
 </style>

@@ -61,6 +61,7 @@ const routes = [
             },
             {
                 path: '/infoDetailed',
+                name: 'infoDetailed',
                 hidden: true,
                 component: () => import('../views/Info/detailed'),
                 meta: {

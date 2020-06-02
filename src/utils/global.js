@@ -2,6 +2,7 @@
 import {MessageBox} from 'element-ui';
 
 export default function global() {
+    // 确认弹窗
     const confirm = (params) => {
         MessageBox.confirm(params.content, params.tip || "提示", {
             confirmButtonText: "确定",

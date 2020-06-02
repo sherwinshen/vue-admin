@@ -72,7 +72,7 @@
                     <template slot-scope="scope">
                         <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
                         <el-button type="success" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
-                        <el-button type="primary" size="mini" @click="handleEdit(scope.row.id)">详情</el-button>
+                        <el-button type="primary" size="mini" @click="handleDetailed(scope.row.id)">详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -96,7 +96,7 @@
             </el-col>
         </el-row>
         <!--新增表单-弹出窗口-->
-        <DialogInfoAdd :flag.sync="dialog_add" :category="category_options.data"></DialogInfoAdd>
+        <DialogInfoAdd :flag.sync="dialog_add" :category="category_options.data" @getList="getList"></DialogInfoAdd>
         <!--编辑表单-弹出窗口-->
         <DialogInfoEdit :flag.sync="dialog_edit" :category="category_options.data" :id="infoId" @getEditedList="updateItem"></DialogInfoEdit>
     </div>
@@ -216,10 +216,9 @@
             // 格式化类型
             const toCategory = ((row) => {
                 const categoryDate = category_options.data.filter(item => item.id === row.categoryId)[0]
-                console.log(categoryDate)
-                if(categoryDate){
+                if (categoryDate) {
                     return categoryDate.category_name
-                }else {
+                } else {
                     return 'null'
                 }
             })
@@ -275,6 +274,16 @@
                 infoId.value = id
                 dialog_edit.value = true
             })
+            // 处理详情页面
+            const handleDetailed = ((id) => {
+                root.$router.push({
+                    // path: `/infoDetailed/${id}`
+                    path:'/infoDetailed',
+                    query: {
+                        id: id
+                    }
+                })
+            })
 
             /*
              * mouted
@@ -293,7 +302,7 @@
                 searchForm, category_options, keywords_options, table, page, multipleSelection,
                 // methods
                 search, handleSelectionChange, handleDelete, handleEdit, deleteAll, handleSizeChange,
-                handleCurrentChange, toDate, toCategory, getList, updateItem,
+                handleCurrentChange, toDate, toCategory, getList, updateItem, handleDetailed,
             }
         }
     }
@@ -314,5 +323,4 @@
         padding: 0 20px;
         font-size: 14px;
     }
-
 </style>

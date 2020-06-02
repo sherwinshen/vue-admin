@@ -98,7 +98,17 @@ div.el-table {
   }
 }
 
-.el-table td, .el-table th{
+.el-table td, .el-table th {
   padding: 10px 0;
+}
+
+.info-table .el-table__body .el-table__row {
+  td:nth-child(3) {
+    .cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 }
 

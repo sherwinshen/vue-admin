@@ -13,7 +13,7 @@ export function GetSms(data) {
 // 登录
 export function Login(data) {
     return service.request({
-        method:'post',
+        method: 'post',
         url: '/login/',
         data
     })
@@ -28,3 +28,11 @@ export function Register(data) {
     })
 }
 
+// 获取用户角色
+export function getUserRole(data = {}) {
+    return service.request({
+        method: "post",
+        url: "/userRole/",
+        data
+    })
+}

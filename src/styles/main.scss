@@ -12,5 +12,25 @@
 }
 
 .display-none {
-  display: none!important;
+  display: none !important;
+}
+
+// 富文本编辑器样式
+.detailContent {
+  .ql-toolbar.ql-snow .ql-formats {
+    margin: 0 !important;
+  }
+
+  .el-form-item__content {
+    line-height: 1.15;
+  }
+}
+
+// 按钮组
+.btn-group {
+  text-align: center;
+
+  .el-button {
+    width: 180px;
+  }
 }
