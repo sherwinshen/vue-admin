@@ -32,13 +32,25 @@ export const defaultRouterMap = [
             {
                 path: '/homeIndex',
                 meta: {
+                    keepAlive: true,
                     name: '首页'
                 },
                 component: () => import('../views/Console/index')
             }
         ]
     },
-
+    {
+        path: '/404',
+        name: 'page404',
+        hidden: true,
+        component: layout,
+        children: [
+            {
+                path: '/404',
+                component: () => import('../views/404')
+            }
+        ]
+    },
 ]
 
 // 动态路由 - 根据权限设定访问
@@ -57,6 +69,7 @@ export const asyncRouterMap = [
                 path: '/infoIndex',
                 component: () => import('../views/Info/index'),
                 meta: {
+                    keepAlive: true,
                     role: ['sale', 'manager'],
                     name: '信息列表'
                 }
@@ -65,6 +78,7 @@ export const asyncRouterMap = [
                 path: '/infoCategory',
                 component: () => import('../views/Info/category'),
                 meta: {
+                    keepAlive: true,
                     role: ['sale'],
                     name: '信息分类'
                 }
@@ -75,6 +89,7 @@ export const asyncRouterMap = [
                 hidden: true,
                 component: () => import('../views/Info/detailed'),
                 meta: {
+                    keepAlive: true,
                     role: ['sale'],
                     name: '信息详情'
                 }
@@ -95,15 +110,22 @@ export const asyncRouterMap = [
                 path: "/userIndex",
                 component: () => import('../views/User/index'),
                 meta: {
+                    keepAlive: true,
                     role: ['manager'],
                     name: '用户列表'
                 }
             }
         ]
-    }
+    },
+    {
+        path: '*',
+        redirect: '404',
+        hidden: true
+    },
 ]
 
 const router = new VueRouter({
+    mode: 'hash',
     routes: defaultRouterMap
 })
 

@@ -29,7 +29,7 @@ const getters = {
 const mutations = {
     SET_ROUTER(state, addRouters) {
         state.addRouters = addRouters
-        state.allRouters = defaultRouterMap.concat(addRouters)
+        state.allRouters = defaultRouterMap.concat(addRouters, asyncRouterMap.slice(-1))
     }
 }
 const actions = {

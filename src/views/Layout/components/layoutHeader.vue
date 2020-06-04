@@ -37,7 +37,6 @@
                     type: 'warning'
                 }).then(() => {
                     root.$store.dispatch('login/exit').then(() => {
-                        console.log('hello')
                         root.$router.push({name: 'Login'})
                     })
                 }).catch(() => {

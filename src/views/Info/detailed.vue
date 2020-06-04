@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import {reactive, ref, onMounted} from '@vue/composition-api'
+    import {reactive, ref, onMounted,onActivated} from '@vue/composition-api'
     import {GetList, EditInfo} from "../../api/info";
     import {TimestampToDate} from '../../utils/formatData'
     import UploadImg from '../../components/uploadImg/index'
@@ -49,6 +49,7 @@
         name: "detailed",
         components: {quillEditor, UploadImg},
         setup(props, {root}) {
+            console.log('onCreated')
             // ----------------------------------- 声明数据 -----------------------------------
             // 当前编辑项的ID
             const id = root.$route.query.id
@@ -129,10 +130,14 @@
             })
 
             onMounted(() => {
+                console.log('onMounted')
                 getInfoCategory()
                 getInfo()
             })
 
+            onActivated(()=>{
+                console.log('onActivated')
+            })
 
             // ----------------------------------- return -----------------------------------
             return {submitLoading, id, form, editorOption, uploadImgConfig, category_options, submit, back,}

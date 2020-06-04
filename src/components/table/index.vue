@@ -26,7 +26,7 @@
                         @current-change="handleCurrentChange"
                         :page-sizes="pageData.pageSizes"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="pageData.total"
+                        :total="tableData.total"
                 >
                 </el-pagination>
             </el-col>
@@ -36,8 +36,7 @@
 
 <script>
     import {onBeforeMount, reactive} from '@vue/composition-api'
-    import {loadTableData} from "../../api/common";
-
+    import { loadData } from "./tableLoadData";
 
     export default {
         name: "myTable",
@@ -49,11 +48,14 @@
             }
         },
         setup: function (props, {emit}) {
+            // 加载数据 - 业务逻辑拆分
+            const { tableData, initLoadData } = loadData();
+
             // ------------- 数据 -------------
             // 表格数据
-            const tableData = reactive({
-                data: [],
-            })
+            // const tableData = reactive({
+            //     data: [],
+            // })
             // 表格配置
             const tableConfig = reactive({
                 tHead: [],
@@ -64,7 +66,6 @@
             const pageData = reactive({
                 pageNumber: 0,
                 pageSize: 10,
-                total: 0,
                 pageSizes: [10, 20, 50, 100],
             });
             // 表格选择
@@ -84,18 +85,18 @@
                 }
             }
             // 初始化数据
-            const initLoadData = ((params) => {
-                let requestData = {
-                    url: params.url,
-                    method: params.method,
-                    data: params.data
-                }
-                loadTableData(requestData).then(response => {
-                    let responseData = response.data.data.data;
-                    tableData.data = responseData;
-                    pageData.total = responseData.length === 0 ? 0 : response.data.data.total
-                })
-            })
+            // const initLoadData = ((params) => {
+            //     let requestData = {
+            //         url: params.url,
+            //         method: params.method,
+            //         data: params.data
+            //     }
+            //     loadTableData(requestData).then(response => {
+            //         let responseData = response.data.data.data;
+            //         tableData.data = responseData;
+            //         pageData.total = responseData.length === 0 ? 0 : response.data.data.total
+            //     })
+            // })
             // 更新数据
             const refreshData = (() => {
                 initLoadData(tableConfig.requestData)

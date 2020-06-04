@@ -77,7 +77,9 @@
             //关键字选项
             const select_options = reactive({
                 data: [{
-                    value: 'phone', label: '手机号码'
+                    value: 'phone', label: '手机号码',
+                },{
+                    value: 'name', label: '真实姓名',
                 }]
             })
             // 单个表单元素 - 编辑时传值

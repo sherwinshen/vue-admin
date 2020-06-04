@@ -186,7 +186,7 @@
             }
             // 获取角色list
             const getRole = (() => {
-                if (initItem.role.length === 0) {
+                if (initItem.role.length === 0) { // 如果有东西意味着已经请求过了，这部分内容不会改变，后续就需要再请求了
                     GetRole().then(response => {
                         initItem.role = response.data.data
                     })
@@ -194,7 +194,7 @@
             })
             // 获取按钮权限
             const getBtnPermission = (() => {
-                if (initItem.btnPerm.length === 0) {
+                if (initItem.btnPerm.length === 0) { // 如果有东西意味着已经请求过了，这部分内容不会改变，后续就需要再请求了
                     GetPermButton().then(response => {
                         initItem.btnPerm = response.data.data
                     })
