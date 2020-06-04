@@ -22,7 +22,7 @@
                 </el-row>
             </el-col>
             <el-col :span="4">
-                <el-button type="success" class="pull-right" @click="dialog_user_add = true">新增</el-button>
+                <el-button type="success" class="pull-right" @click="addNew">新增</el-button>
             </el-col>
         </el-row>
         <!--表格部分-->
@@ -50,7 +50,7 @@
             </template>
         </MyTable>
         <!--弹窗部分-->
-        <DialogUserAdd :flag.sync="dialog_user_add" :editData='editData.data' @refreshTableData='refreshTableData'></DialogUserAdd>
+        <DialogUserAdd :flag.sync="dialog_user_add" :editData="editData.data" @refreshTableData='refreshTableData'></DialogUserAdd>
     </div>
 </template>
 
@@ -146,7 +146,6 @@
                 }
                 update_status_flag.value = true
                 UserActives({id: params.id, status: params.status}).then(response => {
-                    console.log('1')
                     root.$message({
                         message: response.data.message,
                         type: "success"
@@ -192,6 +191,11 @@
                 dialog_user_add.value = true
                 editData.data = Object.assign({}, params)
             })
+            // 新增item
+            const addNew = (() => {
+                editData.data = {}
+                dialog_user_add.value = true
+            })
             // 搜索
             const search = (() => {
                 let requestData = {
@@ -215,6 +219,7 @@
                 handleDelete,
                 handleEdit,
                 search,
+                addNew,
                 refreshTableData,
                 deleteAll
             }

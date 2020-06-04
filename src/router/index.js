@@ -4,7 +4,9 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const layout = () => import('../views/Layout/index');
-const routes = [
+
+// 默认路由 - 所有权限都能访问
+export const defaultRouterMap = [
     {
         path: '/',
         name: 'Index',
@@ -36,11 +38,17 @@ const routes = [
             }
         ]
     },
+
+]
+
+// 动态路由 - 根据权限设定访问
+export const asyncRouterMap = [
     {
         path: '/info',
         name: 'info',
         component: layout,
         meta: {
+            role: ['sale', 'manager'],
             name: '信息管理',
             icon: 'xinxi'
         },
@@ -49,6 +57,7 @@ const routes = [
                 path: '/infoIndex',
                 component: () => import('../views/Info/index'),
                 meta: {
+                    role: ['sale', 'manager'],
                     name: '信息列表'
                 }
             },
@@ -56,6 +65,7 @@ const routes = [
                 path: '/infoCategory',
                 component: () => import('../views/Info/category'),
                 meta: {
+                    role: ['sale'],
                     name: '信息分类'
                 }
             },
@@ -65,6 +75,7 @@ const routes = [
                 hidden: true,
                 component: () => import('../views/Info/detailed'),
                 meta: {
+                    role: ['sale'],
                     name: '信息详情'
                 }
             }
@@ -75,6 +86,7 @@ const routes = [
         name: 'User',
         component: layout,
         meta: {
+            role: ['manager'],
             name: '用户管理',
             icon: 'yonghu'
         },
@@ -83,6 +95,7 @@ const routes = [
                 path: "/userIndex",
                 component: () => import('../views/User/index'),
                 meta: {
+                    role: ['manager'],
                     name: '用户列表'
                 }
             }
@@ -91,7 +104,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-    routes
+    routes: defaultRouterMap
 })
 
 export default router

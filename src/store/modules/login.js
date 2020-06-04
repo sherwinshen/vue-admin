@@ -4,7 +4,9 @@ import {setToKen, setUserName, getUserName, removeToKen, removeUserName} from ".
 
 const state = {
     toKen: '',
-    userName: getUserName() || ''
+    userName: getUserName() || '',
+    roles: [], // 用户角色
+    buttonPermission: []
 }
 const mutations = {
     SET_TOKEN(state, value) {
@@ -12,7 +14,17 @@ const mutations = {
     },
     SET_USERNAME(state, value) {
         state.userName = value
+    },
+    SET_ROLES(state, value) {
+        state.roles = value
+    },
+    SET_BUTTON(state, value) {
+        state.buttonPermission = value;
     }
+}
+const getters = {
+    roles: state => state.roles,
+    buttonPermission: state => state.buttonPermission
 }
 const actions = {
     login(content, requestData) {
@@ -34,6 +46,7 @@ const actions = {
             removeUserName();
             content.commit('SET_TOKEN', '');
             content.commit('SET_USERNAME', '');
+            content.commit('SET_ROLES', []);
             resolve();
         })
     }
@@ -42,6 +55,7 @@ const actions = {
 export default {
     namespaced: true,
     state,
+    getters,
     mutations,
     actions
 };

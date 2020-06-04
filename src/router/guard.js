@@ -20,8 +20,32 @@ router.beforeEach((to, from, next) => {
             removeUserName()
             store.commit('login/SET_TOKEN', '')
             store.commit('login/SET_USERNAME', '')
+        } else {
+            // 获取用户角色然后动态分配路由权限
+            if (store.getters['login/roles'].length === 0) {
+                // 用户角色为空就需要获取
+                store.dispatch('permission/getRoles').then(response => {
+                    let roles = response.role;
+                    // let button = response.button; // 按钮权限
+                    let btnPerm = response.btnPerm; // 允许的按钮
+                    store.commit('login/SET_ROLES', roles)
+                    store.commit("login/SET_BUTTON", btnPerm);
+                    // 动态分配路由
+                    store.dispatch('permission/createRouter', roles).then(() => {
+                        let allRouters = store.getters['permission/allRouters'];
+                        let addRouters = store.getters['permission/addRouters'];
+                        // 路由更新
+                        router.options.routes = allRouters;
+                        // 添加动态路由
+                        router.addRoutes(addRouters)
+                        next({...to, replace: true});
+                    })
+                })
+            } else {
+                // 用户角色已获取
+                next();
+            }
         }
-        next()
     } else {
         // token不存在 - 跳转登录页面
         if (whiteRouter.indexOf(to.path) !== -1) {

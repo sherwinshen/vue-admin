@@ -49,7 +49,7 @@
                 </el-col>
                 <el-col :span="1" style="height:1px">&nbsp;</el-col>
                 <el-col :span="2">
-                    <el-button class="pull-right newBtn" type="success" @click="dialog_add = true">新增</el-button>
+                    <el-button class="pull-right newBtn hidden-button" type="success" @click="dialog_add = true" v-btnPerm="'info:add'">新增</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -70,17 +70,18 @@
                 <el-table-column prop="user" label="管理员" width="100"></el-table-column>
                 <el-table-column label="操作" width="250">
                     <template slot-scope="scope">
-                        <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
-                        <el-button type="success" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
-                        <el-button type="primary" size="mini" @click="handleDetailed(scope.row.id)">详情</el-button>
+                        <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)" v-btnPerm="'info:del'" class="hidden-button">删除</el-button>
+                        <el-button type="success" size="mini" @click="handleEdit(scope.row.id)" v-btnPerm="'info:edit'" class="hidden-button">编辑</el-button>
+                        <el-button type="primary" size="mini" @click="handleDetailed(scope.row.id)" v-btnPerm="'info:detailed'" class="hidden-button">详情
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <!--底部分页-->
         <el-row>
-            <el-col :span="12">
-                <el-button class="newBtn" size="medium" @click="deleteAll" type="danger">批量删除</el-button>
+            <el-col :span="12" style="min-height: 1px">
+                <el-button class="newBtn hidden-button" size="medium" @click="deleteAll" type="danger" v-btnPerm="'info:batchDel'">批量删除</el-button>
             </el-col>
             <el-col :span="12">
                 <el-pagination
@@ -278,7 +279,7 @@
             const handleDetailed = ((id) => {
                 root.$router.push({
                     // path: `/infoDetailed/${id}`
-                    path:'/infoDetailed',
+                    path: '/infoDetailed',
                     query: {
                         id: id
                     }
@@ -322,5 +323,13 @@
         line-height: 40px;
         padding: 0 20px;
         font-size: 14px;
+    }
+
+    button.hidden-button {
+        display: none;
+    }
+
+    button.show-button {
+        display: inline-block;
     }
 </style>

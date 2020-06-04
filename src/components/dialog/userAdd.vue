@@ -24,9 +24,22 @@
             </el-form-item>
             <el-form-item label="角色" prop="role">
                 <el-checkbox-group v-model="form.role">
-                    <el-checkbox v-for="item in roleItems.data" :key="item.role" :label="item.role">{{ item.name }}</el-checkbox>
+                    <el-checkbox v-for="item in initItem.role" :key="item.role" :label="item.role">{{ item.name }}</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
+            <el-form-item label="按钮权限">
+                <template v-if="initItem.btnPerm.length > 0">
+                    <div v-for="item in initItem.btnPerm" :key="item.name">
+                        <h4>{{ item.name }}</h4>
+                        <template v-if="item.perm && item.perm.length > 0">
+                            <el-checkbox-group v-model="form.btnPerm">
+                                <el-checkbox v-for="buttons in item.perm" :key="buttons.value" :label="buttons.value">{{ buttons.name }}</el-checkbox>
+                            </el-checkbox-group>
+                        </template>
+                    </div>
+                </template>
+            </el-form-item>
+
             <el-form-item label-width="0">
                 <div class="btn-group">
                     <el-button @click="closeDialog">取消</el-button>
@@ -43,7 +56,7 @@
     import CityPicker from '../../components/cityPicker/index'
     import {emailRule, passwordRule, strScript} from '../../utils/validate'
     import sha1 from 'js-sha1'
-    import {UserAdd, UserEdit} from "../../api/user";
+    import {UserAdd, UserEdit, GetPermButton} from "../../api/user";
 
     export default {
         name: "dialogUserAdd",
@@ -122,15 +135,17 @@
                 phone: "",
                 region: "",
                 status: "2",
-                role: []
+                role: [],
+                btnPerm: []
             })
             let cityPickerData = reactive({
                 data: {}
             })
-            // 角色选项
-            const roleItems = reactive({
-                data: []
+            const initItem = reactive({
+                role: [], // 角色选项
+                btnPerm: [] // 按钮权限
             })
+
 
             watch([() => props.flag], ([valFlag]) => {
                 dialog_user_add.value = valFlag
@@ -138,15 +153,19 @@
 
             // 打开弹框
             const openDialog = (() => {
-                // 初始化role内容
+                // 初始化role
                 getRole()
+                // 初始化按钮权限
+                getBtnPermission()
                 // 初始化数据
                 initData(props.editData)
+
             })
             // 初始化数据
             const initData = (params) => {
                 if (params.id) {
                     params.role = params.role.split(',')
+                    params.btnPerm = params.btnPerm ? params.btnPerm.split(',') : []; // 数组
                     for (let key in params) {
                         form[key] = params[key]
                     }
@@ -167,11 +186,20 @@
             }
             // 获取角色list
             const getRole = (() => {
-                if (roleItems.data.length === 0) {
+                if (initItem.role.length === 0) {
                     GetRole().then(response => {
-                        roleItems.data = response.data.data
+                        initItem.role = response.data.data
                     })
                 }
+            })
+            // 获取按钮权限
+            const getBtnPermission = (() => {
+                if (initItem.btnPerm.length === 0) {
+                    GetPermButton().then(response => {
+                        initItem.btnPerm = response.data.data
+                    })
+                }
+
             })
             // 提交表单
             const submit = (formName) => {
@@ -184,6 +212,7 @@
                         requestData.role = requestData.role.join();
                         requestData.region = JSON.stringify(cityPickerData.data);
                         requestData.password = sha1(requestData.password);
+                        requestData.btnPerm = requestData.btnPerm.join();  // 数组转字符串，默认以，号隔开
                         // 添加状态：需要密码，并且加密码
                         // 编辑状态：值存在，需要密码，并且加密码；否删除
                         if (requestData.id) {
@@ -226,7 +255,7 @@
                     emit('refreshTableData');
                 })
             })
-            return {dialog_user_add, rules, form, cityPickerData, roleItems, closeDialog, openDialog, submit}
+            return {dialog_user_add, rules, form, cityPickerData, initItem, closeDialog, openDialog, submit}
         }
     }
 </script>
