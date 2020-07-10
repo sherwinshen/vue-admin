@@ -1,6 +1,6 @@
 # Vue3.0项目实战
 
-教程官网：http://www.web-jshtml.cn/#/   视频地址：https://www.bilibili.com/video/BV1zJ411g7Fx
+教程官网：http://www.web-jshtml.cn/#/   视频地址：https://www.bilibili.com/video/BV1zJ411g7Fx  官方源码：[vue-admin](https://github.com/bigbigtime/vue-admin)
 
 **学习内容**：Vue+Vuex+Router+ElementUi+Webpack全家桶，VUE3.0体验版API，组件化开发，生命周期，路由权限，Sass，Axios拦截器，缓存，项目部署，Nginx，域名，服务器，GIT，原型，接口联调，性能，缓存等；
 
@@ -1979,9 +1979,56 @@ rewrite最后一项flag参数：
 rewrite ^/(.*) http://www.web-jshtml.cn/ permanent;    
 ```
 
-## 第29课时 总结
+## 第29课时 
+
+### 29.1 总结
 
 <img src='noteImg/总结.png'>
+
+### 29.2 Vue2.0重置
+
+基础模版（方法使用this.XXX; 数据使用this.XXX）：
+
+```js
+export default {
+    name: "vue2.0_example",
+  	components: {},
+  	props: {}, // 其他地方使用props直接通过this.XXX即可
+    data() {
+        return {
+            myData: 0
+        }
+    },
+  	computed: {
+      myData(){
+        return XXX;
+      }
+    },
+  	watch:{
+    	a(val, oldVal){ // 普通的watch监听
+         console.log("a: "+val, oldVal);
+     	},
+     	b:{ // 深度监听，可监听到对象、数组的变化
+         handler(val, oldVal){
+             console.log("b.c: "+val.c, oldVal.c);
+         },
+         deep:true // true 深度监听，
+         immediate: true // 初始化监听
+     	}
+    },
+    beforeCreate() {},
+    created() {},
+    beforeMount() {},
+    mounted() {},
+    beforeUpdate() {},
+    updated() {},
+    beforeDestroy() {},
+    destroyed() {},
+    methods: {
+        myFunc() {}
+    },
+}
+```
 
 ## 其他
 

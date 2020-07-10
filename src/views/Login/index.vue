@@ -107,7 +107,8 @@
             const loginForm = reactive({
                 email: '306@qq.com',
                 password: '1234sw',
-                passwordRepeat: ''
+                passwordRepeat: '',
+                code: ''
             });
             // 登录按钮属性
             const loginButton = reactive({
