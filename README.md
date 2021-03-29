@@ -1,4 +1,4 @@
-# Vue3.0项目实战
+# Vue3.0项目-简易后台管理系统
 
 教程官网：http://www.web-jshtml.cn/#/   视频地址：https://www.bilibili.com/video/BV1zJ411g7Fx  官方源码：[vue-admin](https://github.com/bigbigtime/vue-admin)
 

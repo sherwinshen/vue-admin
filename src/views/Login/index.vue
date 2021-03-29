@@ -185,7 +185,7 @@
                 }
                 root.$store.dispatch('login/login', requestData).then(() => {
                     // 页面跳转
-                    root.$router.push({name: 'Console'})
+                    root.$router.push({name: 'Console'}).catch(() => {})
                 }).catch(() => {
                     console.log('登录失败')
                 })

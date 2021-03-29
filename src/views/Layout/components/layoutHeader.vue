@@ -37,7 +37,7 @@
                     type: 'warning'
                 }).then(() => {
                     root.$store.dispatch('login/exit').then(() => {
-                        root.$router.push({name: 'Login'})
+                        root.$router.push({name: 'Login'}).catch(() => {})
                     })
                 }).catch(() => {
                     root.$message({
